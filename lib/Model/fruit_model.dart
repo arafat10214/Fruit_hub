@@ -5,6 +5,7 @@ class FruitModel {
   final String image;
   bool isFavorite;
 
+
   FruitModel({
     required this.name,
     required this.price,
@@ -15,3 +16,4 @@ class FruitModel {
 
 
 }
+

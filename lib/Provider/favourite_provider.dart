@@ -12,6 +12,7 @@ class FavoriteProvider with ChangeNotifier {
     if (fruit.isFavorite) {
       _favorites.add(fruit);
     } else {
+      //////=================== Remove Where Ittereable item retun kore ==============////////////////////
       _favorites.removeWhere((item) => item.name == fruit.name);
     }
     notifyListeners();
