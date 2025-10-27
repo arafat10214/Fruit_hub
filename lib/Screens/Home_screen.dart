@@ -1,4 +1,5 @@
 import 'package:ecomeerce_ui/Provider/favourite_provider.dart';
+import 'package:ecomeerce_ui/Screens/Add_to_Basket.dart';
 import 'package:ecomeerce_ui/Screens/favourite_screen.dart';
 import 'package:ecomeerce_ui/Widgets/Tabbar_product.dart';
 import 'package:ecomeerce_ui/fruit_list.dart';
@@ -6,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String firstName;
-  const HomeScreen({super.key, required this.firstName});
-
+  const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -16,6 +15,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    int SelectedCategoryId = 0;
+    final RecomendedProducts = getRecomended();
+    final CategoryProducts = getCategoryId(1);
+
     final favProvider = Provider.of<FavoriteProvider>(context);
     return DefaultTabController(
       length: 4,
@@ -23,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -35,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {},
-                      child:  CircleAvatar(
+                      child: CircleAvatar(
                         backgroundColor: Colors.transparent,
                         child: Icon(
                           Icons.menu_open_outlined,
@@ -53,12 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                         FavoriteScreen(),
+                                    builder: (context) => FavoriteScreen(),
                                   ),
                                 );
                               },
-                              child:  CircleAvatar(
+                              child: CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 child: Icon(
                                   Icons.favorite,
@@ -67,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                             Text(
+                            Text(
                               "Fav",
                               style: TextStyle(
                                 fontSize: 10,
@@ -77,9 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                         SizedBox(width: 15),
+                        SizedBox(width: 15),
                         Column(
-                          children:  [
+                          children: [
                             CircleAvatar(
                               backgroundColor: Colors.transparent,
                               child: Icon(
@@ -103,9 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
 
-                 SizedBox(height: 15),
+                SizedBox(height: 15),
 
-                 Text(
+                Text(
                   "Hello Tony, What Fruit Salad",
                   style: TextStyle(
                     fontSize: 20,
@@ -113,8 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black,
                   ),
                 ),
-                 SizedBox(height: 2),
-                 Text(
+                SizedBox(height: 2),
+                Text(
                   "Combo do you want Today?",
                   style: TextStyle(
                     fontSize: 20,
@@ -122,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black,
                   ),
                 ),
-                 SizedBox(height: 24),
+                SizedBox(height: 24),
 
                 // ===== Search Bar =====
                 Row(
@@ -131,10 +133,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         height: 56,
                         decoration: BoxDecoration(
-                          color:  Color(0XFFF3F4F9),
+                          color: Color(0XFFF3F4F9),
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child:  TextField(
+                        child: TextField(
                           decoration: InputDecoration(
                             hintText: " Search for Fruit Salad Combo",
                             hintStyle: TextStyle(color: Colors.grey),
@@ -152,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                     SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Container(
                       height: 50,
                       width: 50,
@@ -164,17 +166,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 1.5,
                         ),
                       ),
-                      child:  Icon(
-                        Icons.tune,
-                        color: Colors.black,
-                        size: 24,
-                      ),
+                      child: Icon(Icons.tune, color: Colors.black, size: 24),
                     ),
                   ],
                 ),
 
-                 SizedBox(height: 40),
-                 Text(
+                SizedBox(height: 40),
+                Text(
                   "Recommended Combo",
                   style: TextStyle(
                     fontSize: 24,
@@ -182,16 +180,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black87,
                   ),
                 ),
-                 SizedBox(height: 25),
+                SizedBox(height: 25),
 
                 // ===== Horizontal Fruit List =====
                 SizedBox(
-                  height: 190,
+                  height: 200,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: fruits.length,
+                    itemCount: RecomendedProducts.length,
                     itemBuilder: (context, index) {
-                      final fruit = fruits[index];
                       return Container(
                         margin: EdgeInsets.only(right: 16),
                         width: 170,
@@ -215,23 +212,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Center(
                                   child: CircleAvatar(
                                     radius: 45,
-                                    backgroundImage: AssetImage(fruit.image),
+                                    backgroundImage: AssetImage(
+                                      RecomendedProducts[index].image,
+                                    ),
                                     backgroundColor: Colors.transparent,
                                   ),
                                 ), // Favorite icon
                                 Positioned(
                                   right: 5,
-                                  top: -15,
+                                  top: -10,
                                   child: IconButton(
                                     icon: Icon(
-                                      fruit.isFavorite
+                                      RecomendedProducts[index].isFavorite
                                           ? Icons.favorite
                                           : Icons.favorite_outline,
                                       color: Color(0xffFFA451),
                                       size: 24,
                                     ),
                                     onPressed: () {
-                                      favProvider.toggleFavorite(fruit);
+                                      favProvider.toggleFavorite(
+                                        RecomendedProducts[index],
+                                      );
                                     },
                                   ),
                                 ),
@@ -239,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(height: 8), // Fruit name
                             Text(
-                              fruit.name,
+                              RecomendedProducts[index].name,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 14,
@@ -255,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    fruit.price,
+                                    RecomendedProducts[index].price,
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
@@ -285,11 +286,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 48),
+                SizedBox(height: 48),
 
                 // ===== TabBar =====
-                const TabBar(
+                TabBar(
+                  dividerColor: Colors.white,
                   isScrollable: true,
+                  tabAlignment: TabAlignment.start,
                   labelColor: Colors.orange,
                   indicatorColor: Colors.orange,
                   labelStyle: TextStyle(
@@ -297,50 +300,151 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                   unselectedLabelStyle: TextStyle(
-                    fontSize: 12,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                   tabs: [
-                    Tab(text: "Hottest", height: 24),
-                    Tab(text: "Popular", height: 24),
-                    Tab(text: "New combo", height: 24),
-                    Tab(text: "Top", height: 24),
+                    Tab(text: "Hottest", height: 30),
+                    Tab(text: "Popular", height: 30),
+                    Tab(text: "New combo", height: 30),
+                    Tab(text: "Top", height: 30),
                   ],
                   indicator: UnderlineTabIndicator(
                     borderSide: BorderSide(
                       width: 4.0,
                       color: Colors.deepOrange,
                     ),
-                    insets: EdgeInsets.only(left: 0, right: 20),
+                    insets: EdgeInsets.only(left: 0, right: 42),
                   ),
                 ),
 
-                 SizedBox(height: 25),
+                SizedBox(height: 25),
 
                 // ===== TabBarView =====
                 SizedBox(
-                  height: 160, 
+                  height: 160,
                   child: TabBarView(
                     children: List.generate(4, (tabIndex) {
                       return GridView.builder(
-                        padding: EdgeInsets.only(left: 15),
                         scrollDirection: Axis.horizontal,
-                        itemCount: fruits.length,
-                        gridDelegate:
-                             SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                              childAspectRatio: 0.97,
-                            ),
+                        itemCount: CategoryProducts.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.97,
+                        ),
                         itemBuilder: (context, index) {
-                          final product = Tabbbar[index];
-                          return TabbarProduct(
-                            product: product,
-                            isFavorite: product.isFavorite,
-                            onFavoritePressed: () {
-                              favProvider.toggleFavorite(product);
+                          return InkWell(
+                            onTap: (){
+                              SelectedCategoryId = category[index].id;
+                              setState(() {
+                                
+                              });
                             },
+                         child:  Container(
+                            margin: EdgeInsets.only(right: 16),
+                            width: 170,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  blurRadius: 8,
+                                  spreadRadius: 3,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Stack(
+                                  children: [
+                                    // Fruit image
+                                    Center(
+                                      child: CircleAvatar(
+                                        radius: 45,
+                                        backgroundImage: AssetImage(
+                                          CategoryProducts[index].image,
+                                        ),
+                                        backgroundColor: Colors.transparent,
+                                      ),
+                                    ), // Favorite icon
+                                    Positioned(
+                                      right: 5,
+                                      top: -10,
+                                      child: IconButton(
+                                        icon: Icon(
+                                          CategoryProducts[index].isFavorite
+                                              ? Icons.favorite
+                                              : Icons.favorite_outline,
+                                          color: Color(0xffFFA451),
+                                          size: 24,
+                                        ),
+                                        onPressed: () {
+                                          favProvider.toggleFavorite(
+                                            CategoryProducts[index],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8), // Fruit name
+                                Text(
+                                  CategoryProducts[index].name,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF2F2E41),
+                                  ),
+                                ),
+                                SizedBox(height: 6), // Price + Add button row
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 12.0,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        CategoryProducts[index].price,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xffFFA451),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 28,
+                                        width: 28,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xffFFF2E7),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.add,
+                                            color: Color(0xffFFA451),
+                                            size: 20, 
+                                          ),
+                                          onPressed: (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=> AddToBasket()));
+                                          },
+                                        ),
+                                        
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
                           );
                         },
                       );

@@ -99,7 +99,7 @@ class _AuthenticationState extends State<Authentication> {
                       width: 354,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(firstName: "Arafat",)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xffffa451),
