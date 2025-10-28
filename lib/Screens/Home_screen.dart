@@ -264,16 +264,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Container(
-                                    height: 28,
-                                    width: 28,
+                                    height: 35,
+                                    width: 35,
                                     decoration: BoxDecoration(
                                       color: Color(0xffFFF2E7),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: Icon(
-                                      Icons.add,
+                                    child: IconButton(
+                                      icon: 
+                                     Icon(Icons.add,size: 20,),
                                       color: Color(0xffFFA451),
-                                      size: 20,
+                                      onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=> AddToBasket(
+                                             name: "Honey Lime Combo",
+                                              image: "assets/images/Honey_lime.png",
+                                              price: "10000",
+                                        )));
+                                      },
                                     ),
                                   ),
                                 ],
@@ -419,8 +426,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       Container(
-                                        height: 28,
-                                        width: 28,
+                                        height: 35,
+                                        width: 35,
                                         decoration: BoxDecoration(
                                           color: Color(0xffFFF2E7),
                                           borderRadius: BorderRadius.circular(
@@ -434,7 +441,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             size: 20, 
                                           ),
                                           onPressed: (){
-                                            Navigator.push(context, MaterialPageRoute(builder: (context)=> AddToBasket()));
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=> AddToBasket(
+                                              name: "Honey Lime Combo",
+                                              image: "assets/images/Honey_lime.png",
+                                              price: "10000",
+
+                                            )));
                                           },
                                         ),
                                         
